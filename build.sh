@@ -1,6 +1,6 @@
 #!/bin/sh -e
 pluginname="anydesk"
-pluginversion="$(git describe --long --always --tags --dirty)"
+pluginversion="$(git describe --always --tags --dirty)"
 
 build() {
 	GOOS="$1"
