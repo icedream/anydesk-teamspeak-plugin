@@ -1,5 +1,6 @@
 #!/bin/sh -e
 pluginname="anydesk"
+pluginversion="$(git describe --long --always --tags --dirty)"
 
 build() {
 	GOOS="$1"
@@ -53,8 +54,16 @@ build() {
 
 	mkdir -vp "$(dirname "${output}")"
 	PATH="$PATH" CFLAGS="$CFLAGS" CC="$CC" LD_LIBRARY_PATH="$LD_LIBRARY_PATH" \
-	GOOS="$GOOS" GOARCH="$GOARCH" CGO_ENABLED="$CGO_ENABLED" go build -v -buildmode=c-shared -ldflags="-s -w" -o "$output"
+	GOOS="$GOOS" GOARCH="$GOARCH" CGO_ENABLED="$CGO_ENABLED" go build -v -buildmode=c-shared -ldflags="-X 'main.Version=${pluginversion}' -s -w" -o "$output"
 	echo "" >&2
+}
+
+update_package_ini() {
+	sed -i.old \
+		-e "s/^\\(\\s*Version\\s*=\\s*\\).*$/\\1\"${pluginversion}\"/" \
+		package.ini
+	diff -u package.ini.old package.ini || true
+	rm package.ini.old
 }
 
 package() {
@@ -68,4 +77,5 @@ build linux 386
 build linux amd64
 build darwin amd64
 
+update_package_ini
 package

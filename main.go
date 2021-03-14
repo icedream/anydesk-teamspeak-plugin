@@ -13,10 +13,15 @@ import (
 
 var rxAnyDeskID = regexp.MustCompile(`(?i)\b(\d{9,10}|[a-z0-9\.\-_]+@ad(/[a-z0-9/\.\-_]+)?)\b`)
 
+var (
+	// Version contains the plugin version string, generated during build time via `git describe`.
+	// Must be a var instead of a const so it can be set with -ldflags "-X main.Version=…".
+	Version = "0.0.0"
+)
+
 const (
 	Name        = "AnyDesk for TeamSpeak"
 	Author      = "Carl Kittelberger"
-	Version     = "0.0.0"
 	Description = "Converts AnyDesk meeting IDs to clickable links."
 )
 
