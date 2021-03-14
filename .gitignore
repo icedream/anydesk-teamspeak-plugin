@@ -1,0 +1,7 @@
+/plugins/
+*.ts3_plugin
+*.dll
+*.so
+*.dylib
+*.a
+*.la
